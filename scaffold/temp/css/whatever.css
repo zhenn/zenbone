@@ -1,0 +1,14 @@
+#wrap {
+	color: blue;
+	width: 200px;
+	height: 200px;
+	background: url(../images/touch.png) no-repeat gray;
+	background-size: 100px 50px;
+	font-size: 15px;
+}
+
+#wrap img {
+	width: 100px;
+	height: 50px;
+	margin-top: 50px;
+}
