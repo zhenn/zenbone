@@ -45,6 +45,7 @@ module.exports = {
         app: './js/app.js'
     },
     output: output,
+    devtool: 'source-map', // 输出source-map
     module: {
         loaders: [
             {
