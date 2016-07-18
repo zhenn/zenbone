@@ -31,7 +31,7 @@ function start() {
         });
 
         devChild.stdout.on('data', function(data) {
-            console.log(data);
+            console.log(data.toString());
         });
     } else {
 
@@ -56,11 +56,7 @@ function installLocalDeps() {
     console.log('安装本项目依赖, 时间较长请耐心等待..'.green);
 
     child.stdout.on('data', function(data) {
-        console.log(data);
-    });
-
-    child.stderr.on('data', function(data) {
-        console.log(data);
+        console.log(data.toString());
     });
 }
 
