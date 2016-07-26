@@ -42,7 +42,7 @@ if (env == 'stage') {
 module.exports = {
     entry: {
         // 可对应多个入口文件
-        app: './js/app.js'
+        test: './test.js'
     },
     output: output,
     devtool: 'source-map', // 输出source-map
@@ -83,7 +83,7 @@ module.exports = {
                 loader: "url-loader?limit=10000" // 小于3k, 转成base64
             },
             { 
-                test: /\.jpg|mp3|mp4$/, 
+                test: /\.jpg$/, 
                 loader: "file-loader" 
             }
         ]
@@ -100,13 +100,7 @@ module.exports = {
     // 插件
     plugins: [
         new ExtractTextPlugin("[name].css"),
-        new StringReplacePlugin(),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: "commons",
-            filename: "commons.js",
-            minChunks: 3, // (Modules must be shared between 3 entries)
-            chunks: ["pageA", "pageB"] // (Only use these entries)
-        })
+        new StringReplacePlugin()
     ]
 
 };

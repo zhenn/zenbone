@@ -2,8 +2,6 @@
 import '../css/reset.css';
 import '../css/whatever.css';
 
-import './component/mbase';
-
 import React, {Component} from 'react';
 import ReactDOM, {render} from 'react-dom';
 

@@ -5,12 +5,13 @@ var program = require('commander');
 var scaffold = require('../scaffold/index');
 var app = require('../app');
 var build = require('../build');
+var component = require('../component/index');
 
 program
     .version(package.version)
     .option('-p, --port [number]', 'select port for node-service', 80) // 声明端口
-    .option('-s, --stage' , 'define stage-env for building')
-    .option('-P, --product' , 'define product-env for building')
+    .option('-s, --stage', 'define stage-env for building')
+    .option('-P, --product', 'define product-env for building');
 
 // 子命令: 初始化项目
 program
@@ -39,12 +40,26 @@ program
         });
     });
 
+program
+    .command('component <action>')
+    .description('component')
+    .action(function (action) {
+        if (action == 'build') {
+            component.build(); 
+        } else if (action == 'init') {
+            component.initScaffold();
+        } else {
+            console.log('未知action\n可选操作:\n  init 初始化组件\n  build 打包组价');
+        }
+        
+    });
+
 // 子命令:安装js组件
 program
-    .command('install <name>')
+    .command('install [name]')
     .description('intall widget')
     .action(function (name) {
-        widget.install(name);
+        component.install(name);
     });
 
 // 子命令:更新js组件
