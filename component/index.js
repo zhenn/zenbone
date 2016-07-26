@@ -168,18 +168,23 @@ module.exports = {
     emitPackage: function(name) {
         var self = this;
         var cwd = process.cwd(),
-            path = cwd + '/package.json',
-            package = JSON.parse(fs.readFileSync(path, 'utf-8')),
+            path = cwd + '/package.json';
+
+        var packageFile = fs.readFileSync(path, 'utf-8');
+
+        var package = JSON.parse(packageFile),
             _depComponent = package._depComponent || [],
             _arr = _depComponent.concat();
         
+        // console.log(name, _arr);
+
         if (_arr.indexOf(name) >= 0) {
             return;
         }
         _arr.push(name);
 
         package._depComponent = _arr;
-        filetool.writefile(path, stringify(package, {space: '  '}));
+        fs.writeFileSync(path, stringify(package, {space: '  '}));
     },
 
     installFromPackage: function() {
