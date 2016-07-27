@@ -6,7 +6,7 @@
 var fs = require('fs');
 var cpfile = require('cp-file');
 var cpdir = require('copy-dir');
-var rmdir = require('rmdir');
+var rmdirSync = require('rmdir-sync');
 var mkdir = require('mkdir-p');
 var writefile = require('writefile');
 
@@ -92,8 +92,8 @@ module.exports = {
      * 删除文件夹
      * @return void
      */
-    rmdir : function (path , callback) {
-        rmdir.apply(this , arguments);
+    rmdirSync : function (path) {
+        rmdirSync(path);
     },
 
     /**

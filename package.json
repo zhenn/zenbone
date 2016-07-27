@@ -1,6 +1,6 @@
 {
   "name": "zenbone",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "tools for frontend dev, based on webpack",
   "bin": {
     "zenbone": "./bin/zenbone.js"
@@ -25,6 +25,7 @@
     "node-http": "0.0.5",
     "prompt": "^1.0.0",
     "rmdir": "^1.2.0",
+    "rmdir-sync": "^1.0.1",
     "step": "0.0.6",
     "underscore": "^1.8.3",
     "writefile": "^0.2.8"

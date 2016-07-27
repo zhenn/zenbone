@@ -91,7 +91,6 @@ module.exports = {
 
     // 安装组件
     install: function(name) {
-       
         var self = this;
         var cwd = process.cwd();
         var nodeHttp = new NodeHttp;
@@ -135,27 +134,22 @@ module.exports = {
                 var dependencies = package._depComponent;
 
                 function moveDir() {
-                    try {
-                        fs.renameSync(cwd + '/' + name, cwd + '/node_modules/' + name);
-                    } catch(e) {
-                        if (e.message.indexOf('directory not empty') >= 0) {
-
-                            filetool.rmdir(cwd + '/node_modules/' + name, function() {
-                                moveDir();
-                            });
-                        }
+                    // console.log(name.yellow)
+                    if (fs.existsSync(cwd + '/node_modules/' + name)) {
+                        filetool.rmdirSync(cwd + '/node_modules/' + name);
                     }
+                    // console.log(fs.existsSync(cwd + '/' + name).toString().red)
+                    fs.renameSync(cwd + '/' + name, cwd + '/node_modules/' + name);
                 }
-                
+                moveDir();
+
                 // 若组件零依赖
                 // 下载组件移动到node_modules
                 if (dependencies.length == 0) {
-                    moveDir();
                     return;
                 }
-               
+                
                 dependencies.forEach(function(item, i) {
-                    moveDir();
                     self.install(item);
                 });
 
@@ -185,6 +179,7 @@ module.exports = {
 
         package._depComponent = _arr;
         fs.writeFileSync(path, stringify(package, {space: '  '}));
+        // filetool.writefile(path, stringify(package, {space: '  '}));
     },
 
     installFromPackage: function() {
