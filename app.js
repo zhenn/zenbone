@@ -16,27 +16,28 @@ function start() {
 
     // 若已安装本项目依赖
     if (installedDeps) {
-        var devChild = _process.exec('sudo webpack-dev-server', function(err, stdout, stderr) {
-        
-            if (stderr) {
-                console.log(stderr.red);
+        var devChild = _process.spawn('sudo', ['webpack-dev-server']);
+
+        devChild.stdout.on('data', function(data) {
+            console.log(data.toString());
+        });
+
+        devChild.stderr.on('data', function(data) {
+            var str = data.toString();
+            console.log(str.red);
+            if (str.indexOf('webpack-dev-server: command not found') >= 0) {
                 console.log('\n检测到尚未安装webpack或webpack-dev-server.\n正在自动安装webpack...\n'.yellow);
                 installWebpack({
                     needRoot: false
                 });
-            } else {
-                console.log('开发环境：'.white + '启动完成'.gray);
             }
             
         });
 
-        // devChild.stdout.on('data', function(data) {
-        //     console.log(data.toString());
-        // });
-
-        devChild.stderr.on('data', function(data) {
-            console.log(data.toString());
+        devChild.on('exit', function(code) {
+            console.log('child process exited with code ' + code.toString().red);
         });
+
     } else {
 
         installLocalDeps();
