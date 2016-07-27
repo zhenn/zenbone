@@ -30,7 +30,11 @@ function start() {
             
         });
 
-        devChild.stdout.on('data', function(data) {
+        // devChild.stdout.on('data', function(data) {
+        //     console.log(data.toString());
+        // });
+
+        devChild.stderr.on('data', function(data) {
             console.log(data.toString());
         });
     } else {
