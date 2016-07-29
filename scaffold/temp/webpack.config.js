@@ -83,7 +83,7 @@ module.exports = {
                 loader: "url-loader?limit=10000" // 小于3k, 转成base64
             },
             { 
-                test: /\.jpg|mp3|mp4$/, 
+                test: /\.jpg|mp3|mp4|gif$/, 
                 loader: "file-loader" 
             }
         ]
