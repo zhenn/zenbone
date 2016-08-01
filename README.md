@@ -1,22 +1,83 @@
-# 安装
+# zenbone
+
+## 一，概述
+
+** 要点：**
+
+- 基于[webpack](https://webpack.github.io/)
+- 模块化管理、打包工具
+- 集成脚手架工具，适用于创建项目或组件
+- HTML打包
+- 自动配置webpack.config
+
+** 优势： **
+
+
+- 代码向后兼容——完全遵守webpack编码规范，让我们更加方便使用ES6（新一代Javascript编程规范）
+- 高性能——使用webpack编译工具，编译性能高，开发体验佳
+- 生态圈繁荣——可快速使用[NPM](https://www.npmjs.com/)海量JS组件
+- 化繁为简——使用脚手架工具，可帮助我们跳过繁琐的webpack配置，及其他相关学习成本，快速进入项目开发状态
+
+
+## 二，安装维护
+### 安装
 
 	npm install zenbone -g
+	
+### 更新
 
-# 开始使用
+	npm update zenbone -g
+	
+若更新失败，可指定最新版本号重新安装，`npm install zenbone@x.y.z -g`
 
-## 创建项目
+## 三，项目开发
+
+### 1，创建项目
 
 	mkdir test 
 	cd ./test
 	zenbone init
+	
+创建项目结构如下：
 
-## 启动本地环境
+	test
+ 	  | -- css
+ 	  	 | -- reset.css		# reset
+ 	  	 | -- whatever.css	# 项目级css
+ 	  | -- js
+ 	  	 | -- app.js	# js入口
+ 	  | -- images
+ 	  | -- index.html	# html入口
+ 	  | -- package.json		# 项目配置
+ 	  | -- webpack.config.js	# webpack配置文件
+ 	  | -- .gitignore
+
+zenbone对`css、js、images`文件夹没有要求，可以任意存放，JS模块无论引用CSS模块还是图片，均按照相对路径，只要保证路径正确即可。
+
+
+### 2，启动本地环境
+
+启动本地静态服务器
 
 	zenbone start
 
-浏览器键入: `localhost`
+执行上述命令，做了以下几件事情：
 
-## 打包
+- 检测本机是否安装`webpack`及`webpack-dev-server`，若未安装，则自动安装;
+- 检测是否已安装项目依赖，若未安装，则自动安装;
+- 启动静态服务器
+
+因此首次使用`zenbone start`启动环境，等待时间通常会比较长，其主要时间消耗安装工具依赖及项目依赖上，亦可逐次执行上述操作。
+
+	npm install webpack webpack-dev-server -g
+	npm install 
+	zenbone start
+
+在浏览器键入: `localhost`即可查看index.html相关内容。由于在webpack.config.js中配置了watch功能，当文件发生变化后，系统将自动刷新浏览器。
+
+### 3，打包
 
 	zenbone build --product
 	zenbone build --stage
+	
+## 四，组件开发
