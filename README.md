@@ -2,7 +2,7 @@
 
 ## 一，概述
 
-** 要点：**
+**要点**
 
 - 基于[webpack](https://webpack.github.io/)
 - 模块化管理、打包工具
@@ -10,13 +10,15 @@
 - HTML打包
 - 自动配置webpack.config
 
-** 优势： **
-
+**优势：**
 
 - 代码向后兼容——完全遵守webpack编码规范，让我们更加方便使用ES6（新一代Javascript编程规范）
 - 高性能——使用webpack编译工具，编译性能高，开发体验佳
-- 生态圈繁荣——可快速使用[NPM](https://www.npmjs.com/)海量JS组件
+- 生态圈繁荣——可快速使用[NPM](https://www.npmjs.com/)海量JS组件 & [webpack插件](http://webpack.github.io/docs/list-of-plugins.html)
 - 化繁为简——使用脚手架工具，可帮助我们跳过繁琐的webpack配置，及其他相关学习成本，快速进入项目开发状态
+
+**项目地址：**[https://github.com/zhenn/zenbone](https://github.com/zhenn/zenbone)
+
 
 
 ## 二，安装维护
@@ -77,7 +79,51 @@ zenbone对`css、js、images`文件夹没有要求，可以任意存放，JS模�
 
 ### 3，打包
 
-	zenbone build --product
-	zenbone build --stage
+	zenbone build --product		# 生产环境
+	zenbone build --stage		# 预发布环境
+	
+开发调试完成后，可进行预发布、生产环境打包，生成可发布文件。两者相比，仅html中引用资源(css、js)路径不同，其它放则完全一致。
+
+**webpack配置：**
+
+	// 为product环境打包时
+	if (env == 'product') {
+    	// 定制cdn路径
+    	output.publicPath = 'http://cdn/' + projectName + '/' + projectVersion + '/assets/';
+	}
+
+	if (env == 'stage') {
+     	// 定制cdn路径
+    	output.publicPath = '/' + projectName + '/' + projectVersion + '/assets/';
+	}
+	
+**打包后项目结构：**
+
+	test
+	  | -- build
+	  	 | -- assets
+	  	 	| -- 880110af781e078951d0d0fda16353f4.png  # 项目图片，打包后js、css将自动使用此名称
+	  	 	| -- app.js		# js入口，被打包后html引用
+	  	 	| -- app.js.map	# source-map 便于调试
+	  	 	| -- app.css	# css，被打包后html引用
+	  	 	| -- app.css.map	
+	  	 	| -- commmons.js	# 多入口公用部分，将打包后html引用
+	  	 	| -- commons.js.map		
+	  	 | -- index.html	# 打包后html入口
+ 	  | -- css
+ 	  	 | -- reset.css		# reset
+ 	  	 | -- whatever.css	# 项目级css
+ 	  | -- js
+ 	  	 | -- app.js	# js入口
+ 	  | -- images
+ 	  | -- index.html	# html入口
+ 	  | -- package.json		# 项目配置
+ 	  | -- webpack.config.js	# webpack配置文件
+ 	  | -- .gitignore
+
+
+
+
+
 	
 ## 四，组件开发
