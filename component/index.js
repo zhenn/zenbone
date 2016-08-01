@@ -8,8 +8,6 @@ var _ = require('underscore');
 var colors = require('colors');
 var babel = require('babel-core');
 
-var componentDomain = 'http://h5widget.xingyunzhi.cn/';
-
 module.exports = {
     build: function() {
         console.log('即将打包组件...');
@@ -95,6 +93,9 @@ module.exports = {
         var cwd = process.cwd();
         var nodeHttp = new NodeHttp;
         var stamp = +new Date;
+
+        var package=  require(cwd + '/package.json');
+        var componentDomain = package.componentDomain;
 
         if (!name) {
             self.installFromPackage();

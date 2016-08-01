@@ -31,5 +31,6 @@
     "dev": "sudo webpack-dev-server",
     "product": "NODE_ENV=product webpack -p"
   },
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "componentDomain": "http://h5widget.xingyunzhi.cn/"
 }
