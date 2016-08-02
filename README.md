@@ -215,7 +215,7 @@ zenbone对`css、js、images`文件夹没有要求，可以任意存放，JS模�
   	
 当非原始开发者对组件进行维护时，在下载源代码（通常不包括node_modules）后，通过`zenbone install`便可一键安装所有组件依赖。
 
-有关安装组件依赖操作，需要关注package.json中`componentDomain`字段，它决定安装组件源代码来源。路径中最后一个`/`不可省略，以保证zenbone可正确找到组件tar包。
+若要修改组件安装源，需要先修改package.json中`componentDomain`字段。路径中最后一个`/`不可省略，以保证zenbone可正确找到组件tar包。
 
 	{
 		"componentDomain": "http://h5widget.xingyunzhi.cn/"
