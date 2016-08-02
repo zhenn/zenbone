@@ -54,7 +54,7 @@
  	  | -- webpack.config.js	# webpack配置文件
  	  | -- .gitignore
 
-zenbone对`css、js、images`文件夹没有要求，可以任意存放，JS模块无论引用CSS模块还是图片，均按照相对路径，只要保证路径正确即可。
+zenbone对`css、js、images`文件夹没有要求，可以任意存放，JS模块无论引用CSS模块还是图片，均使用相对路径，只要保证路径正确即可。
 
 
 ### 2，启动本地环境
@@ -69,7 +69,7 @@ zenbone对`css、js、images`文件夹没有要求，可以任意存放，JS模�
 - 检测是否已安装项目依赖，若未安装，则自动安装;
 - 启动静态服务器
 
-因此首次使用`zenbone start`启动环境，等待时间通常会比较长，其主要时间消耗安装工具依赖及项目依赖上，亦可逐次执行上述操作。
+首次使用`zenbone start`启动环境，等待时间通常会比较长，其主要时间消耗安装工具依赖及项目依赖上，亦可逐次执行上述操作。
 
 	npm install webpack webpack-dev-server -g
 	npm install 
@@ -99,7 +99,7 @@ zenbone对`css、js、images`文件夹没有要求，可以任意存放，JS模�
 	zenbone build --product		# 生产环境
 	zenbone build --stage		# 预发布环境
 	
-开发调试完成后，可进行预发布、生产环境打包，生成可发布文件。两者相比，仅html中引用资源(css、js)路径不同，其它放则完全一致。
+预发布和生产环境打包之间，仅html中引用资源(css、js)路径不同，其它处理完全一致。
 
 **webpack配置：**
 
@@ -121,7 +121,7 @@ zenbone对`css、js、images`文件夹没有要求，可以任意存放，JS模�
 - css\js对图片资源的引用
 - html入口对js\css的应用
 
-务必在进行打包前更新项目版本号，以避免浏览器缓存。
+务必在进行打包前更新项目版本号，避免浏览器缓存。
 
 	
 **打包后项目结构：**
