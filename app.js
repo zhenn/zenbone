@@ -69,9 +69,9 @@ function installWebpack(opt) {
     
     var opt = opt || {};
     var needRoot = opt.needRoot;
-    var command = 'npm install webpack webpack-dev-server -g';
+    var command = 'npm install webpack@1.12.12 webpack-dev-server -g';
     if (needRoot) {
-        command = 'sudo npm install webpack webpack-dev-server -g';
+        command = 'sudo npm install webpack@1.12.12 webpack-dev-server -g';
     }
     var installChild = _process.exec(command, function(err, stdout, stderr) {
         if (stderr && stderr.indexOf('permission denied') >= 0) {
