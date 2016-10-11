@@ -29,7 +29,7 @@ var cssLoader = {
 // 为product环境打包时
 if (env == 'product') {
     // 定制cdn路径
-    output.publicPath = 'http://h.cdn.pengpengla.com/' + projectName + '/' + projectVersion + '/assets/';
+    output.publicPath = 'http://<%= cdnDomain %>/' + projectName + '/' + projectVersion + '/assets/';
     cssLoader.loader = ExtractTextPlugin.extract("style-loader", "css-loader");
 }
 

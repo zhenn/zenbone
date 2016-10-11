@@ -3,6 +3,7 @@ var colors = require('colors');
 var filetool = require('./base/filetool');
 var path = require('path');
 var fs = require('fs');
+var package = require(process.cwd() + '/package.json');
 
 module.exports = {
     main: function(opt) {
@@ -58,7 +59,7 @@ module.exports = {
             prehost = '/';
 
         if (this.env == 'product') {
-            prehost = 'http://h.cdn.pengpengla.com/';
+            prehost = 'http://' + package.cdnDomain + '/';
         }
 
         content = content.replace(scriptReg, function($1, $2) {

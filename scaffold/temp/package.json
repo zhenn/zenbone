@@ -36,5 +36,6 @@
     "url-loader": "^0.5.7",
     "webpack": "^1.12.12"
   },
-  "componentDomain": "http://h5widget.xingyunzhi.cn/"
+  "componentDomain": "http://h5widget.xingyunzhi.cn/",
+  "cdnDomain": "<%= cdnDomain %>"
 }

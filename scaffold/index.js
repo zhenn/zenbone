@@ -49,6 +49,11 @@ module.exports = {
                     description: '设计稿分辨率模式',
                     required: true,
                     message: 'pattern: 640 | 750 | 0'
+                },
+                cdnDomain: {
+                    description: 'cdn服务域名',
+                    default: 'h.cdn.pengpengla.com',
+                    required: true
                 }
             }
         };
@@ -65,6 +70,7 @@ module.exports = {
             filetool.copydir(self.tempDir , self.cwd);
             fs.renameSync(self.cwd + '/gitignore', self.cwd + '/.gitignore');
             self.createPackage(result);
+            self.createWebpackConfig(result);
             console.log('log:'.green + (' project ' + result.name + ' has created').gray);
 
         });
@@ -76,6 +82,12 @@ module.exports = {
         var self = this;
         var packageJSON = _.template(fs.readFileSync(self.tempDir + '/package.json' , 'utf-8'))(obj);
         fs.writeFileSync(self.cwd + '/package.json' , packageJSON , 'utf-8');
+    },
+
+    createWebpackConfig: function(obj) {
+        var self = this;
+        var configs = _.template(fs.readFileSync(self.tempDir + '/webpack.config.js' , 'utf-8'))(obj);
+        fs.writeFileSync(self.cwd + '/webpack.config.js' , configs , 'utf-8');
     }
 
 
