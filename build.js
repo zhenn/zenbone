@@ -3,7 +3,12 @@ var colors = require('colors');
 var filetool = require('./base/filetool');
 var path = require('path');
 var fs = require('fs');
-var package = require(process.cwd() + '/package.json');
+var package;
+
+if (fs.existsSync(process.cwd() + '/package.json')) {
+    package = require(process.cwd() + '/package.json');
+}
+
 
 module.exports = {
     main: function(opt) {
