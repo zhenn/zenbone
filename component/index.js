@@ -26,6 +26,7 @@ module.exports = {
         var srcFiles = filetool.walker(cwd + '/src');
         
         srcFiles.forEach(function(item, i) {
+            console.log(item)
             if (path.extname(item) == '.js') {
                 var file = fs.readFileSync(item, 'utf-8');
                 var content = babel.transform(file, {
@@ -33,6 +34,8 @@ module.exports = {
                 }).code.replace('\'use strict\';', '');
 
                 filetool.writefile(cwd + '/dist/' + item.replace(cwd + '/src/', ''), content);
+            } else if (path.extname(item) == '.css') {
+                filetool.copyfile(item, item.replace('/src/', '/dist/'));
             }
         });
     },
