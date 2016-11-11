@@ -59,7 +59,7 @@ module.exports = {
             name = package.name,
             version = package.version,
             scriptReg = /<script +?src="(.+?).js">[\s\S]*?<\/script>/gi,
-            linkReg = /<\/head>/i,
+            linkReg = /<script/i,
             fileKey,
             prehost = '/';
 
