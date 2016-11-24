@@ -6,6 +6,7 @@ var scaffold = require('../scaffold/index');
 var app = require('../app');
 var build = require('../build');
 var component = require('../component/index');
+var lang = require('../lang/index');
 
 program
     .version(package.version)
@@ -38,6 +39,13 @@ program
             stage : program.stage,
             product : program.product
         });
+    });
+
+program
+    .command('lang')
+    .description('extract multi-language key')
+    .action(function() {
+        lang.extract();
     });
 
 program
