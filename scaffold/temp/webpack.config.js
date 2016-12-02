@@ -39,10 +39,10 @@ if (env == 'stage') {
     cssLoader.loader = ExtractTextPlugin.extract("style-loader", "css-loader");
 }
 
-module.exports = {
+var config = {
     entry: {
         // 可对应多个入口文件
-        app: './js/app.js'
+        app: ['./js/app.js']
     },
     output: output,
     devtool: 'source-map', // 输出source-map
@@ -110,3 +110,13 @@ module.exports = {
     ]
 
 };
+
+// babel-polyfill用来转换ES2015新的对象和方法,在入口数组中,babel-polyfill必须在入口文件字符串前面
+// 并且必须在入口文件代码的第一行import或require 'babel-polyfill'
+for (var prop in config.entry) {
+    config.entry[prop].unshift(
+        'babel-polyfill'
+    );
+}
+
+module.exports = config;

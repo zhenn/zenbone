@@ -1,4 +1,5 @@
 // css文件中不要使用import
+import 'babel-polyfill';
 import '../css/reset.css';
 import '../css/whatever.css';
 
@@ -26,5 +27,9 @@ class Text extends Component {
         );
     }
 }
+
+let testobj = {};
+let newTarget = Object.assign(testobj, {a: 1}, {b:2});
+alert(JSON.stringify(newTarget));
 
 render(<Text />, $('#wrap')[0]); 
