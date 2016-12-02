@@ -1,6 +1,6 @@
 {
   "name": "zenbone",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "tools for frontend dev, based on webpack",
   "bin": {
     "zenbone": "./bin/zenbone.js"
