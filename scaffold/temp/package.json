@@ -11,6 +11,7 @@
   "author": "zhenn",
   "license": "ISC",
   "dependencies": {
+    "underscore": "^1.8.3",
     "babel-polyfill": "^6.16.0",
     "jquery": "^3.1.0",
     "react": "^0.14.7",
