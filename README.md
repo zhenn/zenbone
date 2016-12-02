@@ -378,6 +378,35 @@ string-replace-webpack-plugin插件则为此而生，简单做如下配置。
 	
 要特别注意，插件的调用务必要在cssLoader之后，否则将无法生效。
 
+### 4, 如何使用babel-polyfill?
+
+Babel默认只转换新的JavaScript句法（syntax），而不转换新的API，比如Iterator、Generator、Set、Maps、Proxy、Reflect、Symbol、Promise等全局对象，以及一些定义在全局对象上的方法（比如Object.assign）都不会转码。
+
+举例来说，ES6在Array对象上新增了Array.from方法。Babel就不会转码这个方法。如果想让这个方法运行，必须使用babel-polyfill，为当前环境提供一个垫片。
+
+webpack.config.js对babel-polyfill配置的部分：
+
+	// 在入口数组中,babel-polyfill必须在入口文件字符串前面
+	for (var prop in config.entry) {
+	    config.entry[prop].unshift(
+	        'babel-polyfill'
+	    );
+	}
+
+最终config.entry的结构如下：
+
+	{
+		entry: {
+			app: ['babel-polyfill', './js/app']
+		}
+	}
+
+在入口文件app.js中，在第一行引入`babel-polyfill`。
+
+	import 'babel-polyfill';
+	// require('babel-polyfill');
+
+
 ### 待续...
 
 
