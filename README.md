@@ -93,9 +93,11 @@ zenbone对`css、js、images`文件夹没有要求，可以任意存放，JS模�
 
 	import React, {Component} from 'react';
 	
-### 4，一键提取多语言包keys
+### 4，多语言包管理
 
-	zenbone lang
+#### 一键提取多语言包keys
+
+	zenbone lang key
 	
 自动在`js/lang/`目录创建`keys`文件，JS文件中语言包字段都会被收录，形如：
 
@@ -122,6 +124,41 @@ zenbone对`css、js、images`文件夹没有要求，可以任意存放，JS模�
 	==============================新增key==============================
 	了吗Q^
 	Q^
+	
+### 创建本地多语言包文件（Google Spreadsheet）
+
+使用Google Spreadsheet维护多语言配置文件，使用该明了从Google Spreadsheet中导出配置内容，创建本地多语言包js文件。
+
+	zenbone lang file
+	
+package.json配置：
+
+	"googleSpreadsheetId": "", // Google Spreadsheet Id 
+  	"googleSpreadsheetIndex": 0 // Google Spreadsheet中sheet的索引。 
+  	
+执行	`zenbone lang file`命令创建本地多语言包文件时，会使用`package.json`中配置的
+`googleSpreadsheetId`，`googleSpreadsheetIndex`。
+
+
+
+**字段说明：**
+
+* `googleSpreadsheetId`：Google Spreadsheet表格的ID。例如：
+
+		文档链接：https://docs.google.com/spreadsheets/d/1Aiemu_rRqQTmDwr146URYPfB1PDv8ADE9SxrOOA1GUs/edit
+
+		googleSpreadsheetId：1Aiemu_rRqQTmDwr146URYPfB1PDv8ADE9SxrOOA1GUs
+* `googleSpreadsheetIndex`：Google Spreadsheet表格中Sheet的索引值。默认0，第一张表格。
+
+
+**Google Spreadsheet使用步骤：**
+
+* 创建一个Google表格
+* 点击菜单：`File`->`Publish to the web.`，发布文件。［必须］
+* 选中Published content & settings配置：Automatically republish when changes are made。每次变更都会自动发布文件，更新文件内容。
+* 将Google表格的ID配置到项目文件package.json。
+
+
 
 ### 5，打包
 

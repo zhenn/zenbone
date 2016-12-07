@@ -15,10 +15,12 @@
   "author": "zhenn",
   "dependencies": {
     "babel-core": "^6.11.4",
+    "bluebird": "^3.4.6",
     "colors": "^1.1.2",
     "commander": "^2.8.0",
     "copy-dir": "0.3.0",
     "cp-file": "^3.1.0",
+    "google-spreadsheet": "^2.0.3",
     "json-comments": "^0.2.1",
     "json-stable-stringify": "^1.0.1",
     "mkdir-p": "0.0.6",

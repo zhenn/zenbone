@@ -7,6 +7,7 @@ var app = require('../app');
 var build = require('../build');
 var component = require('../component/index');
 var lang = require('../lang/index');
+var exportLangFile = require('../lang/file');
 
 program
     .version(package.version)
@@ -41,11 +42,18 @@ program
         });
     });
 
+
 program
-    .command('lang')
-    .description('extract multi-language key')
-    .action(function() {
-        lang.extract();
+    .command('lang <action>')
+    .description('extract multi-language key and export multi-language file')
+    .action(function(action) {
+        if (action == 'file') {
+            exportLangFile.main();
+        } else if (action == 'key'){
+            lang.extract();
+        } else {
+            console.log('未知action\n可选操作:\n  file 导出js文件\n  key 提取多语言包keys');
+        }
     });
 
 program
