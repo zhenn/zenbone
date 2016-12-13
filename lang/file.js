@@ -6,7 +6,7 @@ var Promise = require('bluebird');
 var stringify = require('json-stable-stringify');
 var filetool = require('../base/filetool');
 
-var languages = ['zh-CN', 'zh-TW', 'zh-HK', 'ar-EG', 'vi-VN', 'en-US', 'zh-HK', 'fr-FR', 'ko-KR', 'ru-RU'];
+var languages = ['zh-CN', 'zh-TW', 'zh-HK', 'ar-EG', 'vi-VN', 'en-US', 'zh-HK', 'fr-FR', 'ko-KR', 'ru-RU', 'ja-JP'];
 
 var exportLangFile = {
     main: function() {
