@@ -6,7 +6,24 @@ var Promise = require('bluebird');
 var stringify = require('json-stable-stringify');
 var filetool = require('../base/filetool');
 
-var languages = ['zh-CN', 'zh-TW', 'zh-HK', 'ar-EG', 'vi-VN', 'en-US', 'zh-HK', 'fr-FR', 'ko-KR', 'ru-RU'];
+var languages = [
+    'zh-CN', 'zh-TW', 'zh-HK', 'ar-EG', 'vi-VN', 'en-US',
+    'fr-FR', 'ko-KR', 'ru-RU', 'ja-JP', 'ar-SA', 'bg-BG',
+    'hr-HR', 'cs-CZ', 'da-DK', 'nl-NL', 'et-EE', 'fi-FI',
+    'de-DE', 'el-GR', 'he-IL', 'hu-HU', 'it-IT', 'lv-LV',
+    'nb-NO', 'pl-PL', 'pt-BR', 'pt-PT', 'ro-RO', 'sr-Latn-CS',
+    'sk-SK', 'sl-SI', 'es-ES', 'sv-SE', 'th-TH', 'tr-TR',
+    'uk-UA', 'yo-NG', 'cy-GB', 'uz-Latn-UZ', 'ur-PK', 'te-IN',
+    'tt-RU', 'ta-IN', 'si-LK', 'tn-ZA', 'nso-ZA', 'sr-Cyrl-CS',
+    'quz-PE', 'pa-IN', 'fa-IR', 'or-IN', 'nn-NO', 'ne-NP',
+    'mr-IN', 'mi-NZ', 'mt-MT', 'ml-IN', 'ms-MY', 'ms-BN',
+    'mk-MK', 'lb-LU', 'ky-KG', 'kok-IN', 'sw-KE', 'km-KH',
+    'kk-KZ', 'kn-IN', 'zu-ZA', 'xh-ZA', 'ga-IE', 'iu-Latn-CA',
+    'id-ID', 'ig-NG', 'is-IS', 'hi-IN', 'ha-Latn-NG', 'gu-IN',
+    'ka-GE', 'gl-ES', 'fil-PH', 'ca-ES', 'bs-Latn-BA', 'bs-Cyrl-BA',
+    'bn-IN', 'bn-BD', 'eu-ES', 'az-Latn-AZ', 'as-IN', 'hy-AM', 'am-ET',
+    'sq-AL', 'af-ZA'
+];
 
 var exportLangFile = {
     main: function() {
@@ -15,22 +32,22 @@ var exportLangFile = {
         var package = require(cwd + '/package.json');
         var spreadsheetId = package.googleSpreadsheetId;
         var spreadsheetIdx = package.googleSpreadsheetIndex; // 从0开始
-        
+
         if (spreadsheetId) {
             this.spreadsheetToJson({
-                spreadsheetId: spreadsheetId,
-                vertical: true,
-                hash: 'key',
-                worksheet: spreadsheetIdx
-            })
-            .then(function(res) {
-                // 获取JSON数据
-                // TODO 导出到指定的文件目录中
-                self.save(res);
-            })
-            .catch(function(err) {
-                 console.log(err);
-            })
+                    spreadsheetId: spreadsheetId,
+                    vertical: true,
+                    hash: 'key',
+                    worksheet: spreadsheetIdx
+                })
+                .then(function(res) {
+                    // 获取JSON数据
+                    // TODO 导出到指定的文件目录中
+                    self.save(res);
+                })
+                .catch(function(err) {
+                    console.log(err);
+                })
         } else {
             console.log('googleSpreadsheetId未配置，请在package.json中进行配置'.red);
         }
@@ -163,7 +180,7 @@ var exportLangFile = {
         return this.getWorksheets(options)
             .then(function(worksheets) {
                 var identifiers = normalizeWorksheetIdentifiers(options.worksheet);
-                
+
                 var selectedWorksheets = worksheets.filter(function(worksheet, index) {
                     return identifiers.indexOf(index) !== -1 || identifiers.indexOf(worksheet.title) !== -1;
                 });
