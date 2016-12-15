@@ -105,8 +105,8 @@ var exportLangFile = {
             if (typeof cell.value !== 'string' || cell.value === '')
                 return properties;
 
-            properties[cell[colProp]] = handlePropertyName(cell.value, options.propertyMode);
-
+            properties[cell[colProp]] = (cell.value || '').trim();
+            
             return properties;
         }, {});
 
@@ -240,41 +240,6 @@ var exportLangFile = {
             });
     }
 }
-
-function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function getWords(phrase) {
-    return phrase.replace(/[- ]/ig, ' ').split(' ');
-}
-
-function handlePropertyName(cellValue, handleMode) {
-
-    var handleModeType = typeof handleMode;
-
-    if (handleModeType === 'function')
-        return handleMode(cellValue);
-
-    var propertyName = (cellValue || '').trim();
-
-    if (handleMode === 'camel' || handleModeType === 'undefined')
-        return getWords(propertyName.toLowerCase()).map(function(word, index) {
-            return !index ? word : capitalize(word);
-        }).join('');
-
-    if (handleMode === 'pascal')
-        return getWords(propertyName.toLowerCase()).map(function(word) {
-            return capitalize(word);
-        }).join('');
-
-    if (handleMode === 'nospace')
-        return getWords(propertyName).join('');
-
-    return propertyName;
-}
-
-
 function normalizeWorksheetIdentifiers(option) {
 
     if (typeof option === 'undefined')
