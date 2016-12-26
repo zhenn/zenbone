@@ -61,7 +61,10 @@ program
     .description('component')
     .action(function (action) {
         if (action == 'build') {
-            component.build(); 
+            component.build();
+            build.main({
+                stage : program.stage
+            }); 
         } else if (action == 'init') {
             component.initScaffold();
         } else {
