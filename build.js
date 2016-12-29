@@ -57,6 +57,7 @@ module.exports = {
 
         var package = require(process.cwd() + '/package.json'),
             name = package.name,
+            group = package.gitlabGroup,
             version = package.version,
             scriptReg = /<script +?src="(.+?).js">[\s\S]*?<\/script>/gi,
             linkReg = /<script/i,
@@ -72,12 +73,12 @@ module.exports = {
                 return $1;
             }
             fileKey = $2;
-            return $1.replace($2, prehost + name + '/' + version + '/assets/' + $2);
+            return $1.replace($2, prehost + group + '/' + name + '/' + version + '/assets/' + $2);
         });
 
         // content = content.replace(linkReg, );
         content = content.replace(linkReg, function($1, $2) {
-            return '<link type="text/css" rel="stylesheet" href="' + prehost + name + '/' + version + '/assets/' + fileKey + '.css" />\n' + $1;
+            return '<link type="text/css" rel="stylesheet" href="' + prehost + group + '/' + name + '/' + version + '/assets/' + fileKey + '.css" />\n' + $1;
         });
 
         return content;

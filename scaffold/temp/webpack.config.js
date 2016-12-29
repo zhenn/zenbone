@@ -13,6 +13,8 @@ var package = require('./package.json');
 var projectVersion = package.version;
 var projectName = package.name;
 var cssmode = package.cssmode;
+var gitlabGroup = package.gitlabGroup;
+var cdnDomain = package.cdnDomain;
 
 // 输出口
 var output = {
@@ -29,15 +31,15 @@ var cssLoader = {
 // 为product环境打包时
 if (env == 'product') {
     // 定制cdn路径
-    output.publicPath = 'http://<%= cdnDomain %>/' + projectName + '/' + projectVersion + '/assets/';
-    cssLoader.loader = ExtractTextPlugin.extract("style-loader", "css-loader");
+    output.publicPath = 'http://' + cdnDomain + '/' + gitlabGroup + '/' + projectName + '/' + projectVersion + '/assets/';
 }
 
 if (env == 'stage') {
      // 定制cdn路径
-    output.publicPath = '/' + projectName + '/' + projectVersion + '/assets/';
-    cssLoader.loader = ExtractTextPlugin.extract("style-loader", "css-loader");
+    output.publicPath = '/' + gitlabGroup + '/' + projectName + '/' + projectVersion + '/assets/';
 }
+
+cssLoader.loader = ExtractTextPlugin.extract("style-loader", "css-loader");
 
 var config = {
     entry: {

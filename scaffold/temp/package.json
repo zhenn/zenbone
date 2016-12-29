@@ -41,5 +41,6 @@
   "componentDomain": "http://h5widget.xingyunzhi.cn/",
   "cdnDomain": "<%= cdnDomain %>",
   "googleSpreadsheetId": "",
-  "googleSpreadsheetIndex": 0
+  "googleSpreadsheetIndex": 0,
+  "gitlabGroup": "<%= gitlabGroup %>"
 }

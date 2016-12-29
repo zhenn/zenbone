@@ -26,18 +26,12 @@ var cssLoader = {
     loader: 'style!css'
 };
 
-// 为product环境打包时
-if (env == 'product') {
-    // 定制cdn路径
-    output.publicPath = 'http://h.cdn.pengpengla.com/' + projectName + '/' + projectVersion + '/assets/';
-    cssLoader.loader = ExtractTextPlugin.extract("style-loader", "css-loader");
-}
-
 if (env == 'stage') {
      // 定制cdn路径
-    output.publicPath = '/' + projectName + '/' + projectVersion + '/assets/';
-    cssLoader.loader = ExtractTextPlugin.extract("style-loader", "css-loader");
+    output.publicPath = '/component/' + projectName + '/' + projectVersion + '/assets/';
 }
+
+cssLoader.loader = ExtractTextPlugin.extract("style-loader", "css-loader");
 
 module.exports = {
     entry: {

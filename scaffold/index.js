@@ -54,6 +54,9 @@ module.exports = {
                     description: 'cdn服务域名',
                     default: 'h.cdn.pengpengla.com',
                     required: true
+                },
+                gitlabGroup: {
+                    description: 'gitlab group名称, 用于生成cdn资源路径\n 若为空, 请在项目打包前在package.json中补全'
                 }
             }
         };
@@ -66,13 +69,14 @@ module.exports = {
     create : function () {
         var self = this;
         
+
+
         self.getBaseMsg(function (err , result) {
             filetool.copydir(self.tempDir , self.cwd);
             fs.renameSync(self.cwd + '/gitignore', self.cwd + '/.gitignore');
             self.createPackage(result);
             self.createWebpackConfig(result);
             console.log('log:'.green + (' project ' + result.name + ' has created').gray);
-
         });
         
     },
