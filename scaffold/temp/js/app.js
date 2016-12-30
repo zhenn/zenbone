@@ -30,6 +30,6 @@ class Text extends Component {
 
 let testobj = {};
 let newTarget = Object.assign(testobj, {a: 1}, {b:2});
-alert(JSON.stringify(newTarget));
+console.log(JSON.stringify(newTarget));
 
 render(<Text />, $('#wrap')[0]); 

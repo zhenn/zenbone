@@ -29,9 +29,10 @@ var cssLoader = {
 if (env == 'stage') {
      // 定制cdn路径
     output.publicPath = '/component/' + projectName + '/' + projectVersion + '/assets/';
+    cssLoader.loader = ExtractTextPlugin.extract("style-loader", "css-loader");
 }
 
-cssLoader.loader = ExtractTextPlugin.extract("style-loader", "css-loader");
+
 
 module.exports = {
     entry: {

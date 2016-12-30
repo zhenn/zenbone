@@ -32,14 +32,14 @@ var cssLoader = {
 if (env == 'product') {
     // 定制cdn路径
     output.publicPath = 'http://' + cdnDomain + '/' + gitlabGroup + '/' + projectName + '/' + projectVersion + '/assets/';
+    cssLoader.loader = ExtractTextPlugin.extract("style-loader", "css-loader");
 }
 
 if (env == 'stage') {
      // 定制cdn路径
     output.publicPath = '/' + gitlabGroup + '/' + projectName + '/' + projectVersion + '/assets/';
+    cssLoader.loader = ExtractTextPlugin.extract("style-loader", "css-loader");
 }
-
-cssLoader.loader = ExtractTextPlugin.extract("style-loader", "css-loader");
 
 var config = {
     entry: {
@@ -58,7 +58,10 @@ var config = {
                     presets: ['es2015', 'react', 'stage-0']
                 }
             },
-            
+            {
+                test: /\.vue$/, // vue-loader 加载.vue单文件组件
+                loader: 'vue'
+            },
             cssLoader,
             { 
                 test: /\.css|jsx?$/,
@@ -90,6 +93,9 @@ var config = {
             }
         ]
     },
+    resolve: {
+        extensions: ['', '.js', '.vue'] // 确保引用时省略模块扩展名
+    },
     // server配置
     // sudo webpack-dev-server
     devServer: {

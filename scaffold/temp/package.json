@@ -15,7 +15,8 @@
     "babel-polyfill": "^6.16.0",
     "jquery": "^3.1.0",
     "react": "^0.14.7",
-    "react-dom": "^0.14.7"
+    "react-dom": "^0.14.7",
+    "vue": "^2.1.8"
   },
   "babel": {
     "presets": [
@@ -36,6 +37,8 @@
     "string-replace-webpack-plugin": "0.0.3",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
+    "vue-loader": "^10.0.2",
+    "vue-template-compiler": "^2.1.7",
     "webpack": "^1.12.12"
   },
   "componentDomain": "http://h5widget.xingyunzhi.cn/",
