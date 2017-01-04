@@ -31,14 +31,14 @@ var exportLangFile = {
         var cwd = process.cwd();
         var package = require(cwd + '/package.json');
         var spreadsheetId = package.googleSpreadsheetId;
-        var spreadsheetIdx = package.googleSpreadsheetIndex; // 从0开始
+        var googleWorksheet = package.googleWorksheet || 0; // 从0开始
 
         if (spreadsheetId) {
             this.spreadsheetToJson({
                     spreadsheetId: spreadsheetId,
                     vertical: true,
                     hash: 'key',
-                    worksheet: spreadsheetIdx
+                    worksheet: googleWorksheet
                 })
                 .then(function(res) {
                     // 获取JSON数据
@@ -204,10 +204,23 @@ var exportLangFile = {
                     return self.cellsToJson(cells, options);
                 });
 
-                if (Array.isArray(options.worksheet))
-                    return finalList;
-                else
+                if (Array.isArray(options.worksheet)) {
+                    var result = {};
+                    for (var i = finalList.length; i--;) { // 前面的sheet覆盖后面
+                        var finalListItem = finalList[i];
+                        for (var key in finalListItem) {
+                            var value = finalListItem[key]
+                            if (result[key]) {
+                                result[key] = MergeRecursive(result[key], value);
+                            } else {
+                                result[key] = value;
+                            }
+                        }
+                    }
+                    return result;
+                }else{
                     return finalList[0];
+                }
             });
     },
 
@@ -240,6 +253,29 @@ var exportLangFile = {
             });
     }
 }
+
+function MergeRecursive(obj1, obj2) {
+
+  for (var p in obj2) {
+    try {
+      // Property in destination object set; update its value.
+      if ( obj2[p].constructor == Object ) {
+        obj1[p] = MergeRecursive(obj1[p], obj2[p]);
+
+      } else {
+        obj1[p] = obj2[p];
+
+      }
+    } catch(e) {
+      // Property in destination object not set; create it and set its value.
+      obj1[p] = obj2[p];
+
+    }
+  }
+
+  return obj1;
+}
+
 function normalizeWorksheetIdentifiers(option) {
 
     if (typeof option === 'undefined')
