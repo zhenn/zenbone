@@ -94,7 +94,10 @@ var config = {
         ]
     },
     resolve: {
-        extensions: ['', '.js', '.vue'] // 确保引用时省略模块扩展名
+        extensions: ['', '.js', '.vue'], // 确保引用时省略模块扩展名
+        alias:{
+            'vue$': 'vue/dist/vue.common.js'  // 可同时使用独立构建和运行构建
+        }
     },
     // server配置
     // sudo webpack-dev-server
