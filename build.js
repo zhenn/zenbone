@@ -45,7 +45,7 @@ module.exports = {
                 return;
             }
             var file = _path + '/' + item.name;
-            if (path.extname(file) == '.html') {
+            if (path.extname(file) == '.html' || path.extname(file) == '.php') {
                 arr.push(file);
             }
         });
