@@ -51,6 +51,10 @@ var config = {
     module: {
         loaders: [
             {
+                test: /\.tmpl$/, 
+                loader: "html-tpl" 
+            },
+            {
                 test: /\.jsx?$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/,
