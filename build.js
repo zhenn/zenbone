@@ -65,7 +65,7 @@ module.exports = {
             prehost = '/';
 
         if (this.env == 'product') {
-            prehost = 'http://' + package.cdnDomain + '/';
+            prehost = '//' + package.cdnDomain + '/';
         }
 
         content = content.replace(scriptReg, function($1, $2) {
