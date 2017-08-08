@@ -14,6 +14,8 @@ module.exports = {
     main: function(opt) {
         var self = this;
         var env = self.env = opt.product ? 'product' : 'stage';
+        
+        filetool.rmdirSync(process.cwd() + '/build');
         self.createAssets(opt, function() {
             self.buildHTML();
             console.log('\n项目构建完成...'.green);
