@@ -19,26 +19,32 @@ var cdnDomain = package.cdnDomain;
 // 输出口
 var output = {
     path: path.resolve(__dirname, "build/assets"),
-    filename: '[name].js' 
+    filename: '[name].js',
+    chunkFilename: '[name].[chunkhash:5].chunk.js'
 };
 
 // 声明cssloader
 var cssLoader = {
     test: /\.css$/,
-    loader: 'style!css'
+    use: [
+        'style-loader',
+        'css-loader'
+    ]
 };
 
 // 为product环境打包时
 if (env == 'product') {
     // 定制cdn路径
     output.publicPath = '//' + cdnDomain + '/' + gitlabGroup + '/' + projectName + '/' + projectVersion + '/assets/';
-    cssLoader.loader = ExtractTextPlugin.extract("style-loader", "css-loader");
+    cssLoader.loader = ExtractTextPlugin.extract("css-loader", "postcss-loader");
+    delete cssLoader.use;
 }
 
 if (env == 'stage') {
      // 定制cdn路径
     output.publicPath = '/' + gitlabGroup + '/' + projectName + '/' + projectVersion + '/assets/';
-    cssLoader.loader = ExtractTextPlugin.extract("style-loader", "css-loader");
+    cssLoader.loader = ExtractTextPlugin.extract("css-loader", "postcss-loader");
+    delete cssLoader.use;
 }
 
 var config = {
@@ -59,7 +65,8 @@ var config = {
                 loader: 'babel-loader',
                 exclude: /node_modules/,
                 query: {
-                    presets: ['es2015', 'react', 'stage-0']
+                    presets: ['es2015', 'react', 'stage-0'],
+                    plugins: ['transform-remove-strict-mode']
                 }
             },
             {
@@ -89,7 +96,7 @@ var config = {
             },
             { 
                 test: /\.png$/, 
-                loader: "url-loader?limit=10000" // 小于3k, 转成base64
+                loader: "url-loader?limit=6000" // 小于3k, 转成base64
             },
             { 
                 test: /\.jpg|mp3|mp4|gif$/, 
@@ -98,7 +105,7 @@ var config = {
         ]
     },
     resolve: {
-        extensions: ['', '.js', '.vue'], // 确保引用时省略模块扩展名
+        extensions: ['.js', '.vue'], // 确保引用时省略模块扩展名
         alias:{
             'vue$': 'vue/dist/vue.common.js'  // 可同时使用独立构建和运行构建
         }
@@ -125,13 +132,5 @@ var config = {
     ]
 
 };
-
-// babel-polyfill用来转换ES2015新的对象和方法,在入口数组中,babel-polyfill必须在入口文件字符串前面
-// 并且必须在入口文件代码的第一行import或require 'babel-polyfill'
-for (var prop in config.entry) {
-    config.entry[prop].unshift(
-        'babel-polyfill'
-    );
-}
 
 module.exports = config;

@@ -1,35 +1,30 @@
 // css文件中不要使用import
-import 'babel-polyfill';
 import '../css/reset.css';
 import '../css/whatever.css';
 
+import './lib/object.assign';
+import './lib/promise';
 import React, {Component} from 'react';
 import ReactDOM, {render} from 'react-dom';
+import { Router, Route, hashHistory, useRouterHistory} from 'react-router';
 
-class Text extends Component {
+// 异步加载模块，打包独立的chunk文件
+const Home  = (location, cb) => {
+    require.ensure([], require => {
+        cb(null, require('./home').default);
+    }, 'home');
+};
 
-    static defaultProps = {
-        p: '1'
-    };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            q: 2
-        };
-        // ..
-    } 
-
+class App extends Component {
+    
     render() {
-        let img = require('../images/gold.png');
         return (
-            <div>props: {this.props.p}, state: {this.state.q}<img src={img} /></div>
+            <Router history={hashHistory}>
+                <Route path="/" getComponent={Home} />
+                <Route path="*" getComponent={Home} />
+            </Router>    
         );
     }
 }
 
-let testobj = {};
-let newTarget = Object.assign(testobj, {a: 1}, {b:2});
-console.log(JSON.stringify(newTarget));
-
-render(<Text />, $('#wrap')[0]); 
+render(<App />, $('#wrap')[0]); 
