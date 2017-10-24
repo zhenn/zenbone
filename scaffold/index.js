@@ -9,10 +9,13 @@ var _process = require('child_process');
 var step = require('step');
 
 module.exports = {
-    main : function () {
+    /**
+     * temp 模版名称
+     */
+    main : function (temp) {
         var self = this;
         self.cwd = process.cwd();
-        self.tempDir = __dirname + '/temp';
+        self.tempDir = __dirname + temp || '/temp';
         
         // if (self.isEmpty()) {
             self.create();

@@ -34,15 +34,17 @@
     "extract-text-webpack-plugin": "^3.0.0",
     "postcss-loader": "^2.0.6",
     "string-replace-webpack-plugin": "0.0.5",
-    "underscore-template-loader": "^0.8.0",
     "style-loader": "^0.18.2",
+    "underscore-template-loader": "^0.8.0",
     "url-loader": "^0.5.9",
     "webpack": "^3.5.5"
   },
   "componentDomain": "http://h5widget.xingyunzhi.cn/",
   "cdnDomain": "<%= cdnDomain %>",
-  "googleFileExport": "module.exports",
-  "googleSpreadsheetId": "",
-  "googleWorksheet": ["title"],
+  "googleFilePrefix": "window.UpLive_LangPack",
+  "googleSpreadsheetId": "1Hjp1U2iEVGyvLwUAzIuUfRtMY0wYTWSUvAEqjmWOpok",
+  "googleWorksheet": [
+    "活动翻译模版New"
+  ],
   "gitlabGroup": "<%= gitlabGroup %>"
 }

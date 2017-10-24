@@ -32,7 +32,7 @@ var exportLangFile = {
         var package = require(cwd + '/package.json');
         var spreadsheetId = package.googleSpreadsheetId;
         var googleWorksheet = package.googleWorksheet || 0; // 从0开始
-
+        var fileContent = package.googleFileExport || 'module.exports'
         if (spreadsheetId) {
             this.spreadsheetToJson({
                     spreadsheetId: spreadsheetId,
@@ -43,7 +43,7 @@ var exportLangFile = {
                 .then(function(res) {
                     // 获取JSON数据
                     // TODO 导出到指定的文件目录中
-                    self.save(res);
+                    self.save(res, fileContent);
                 })
                 .catch(function(err) {
                     console.log(err);
@@ -53,12 +53,12 @@ var exportLangFile = {
         }
     },
 
-    save: function(data) {
+    save: function(data, fileContent) {
         var gsfile = process.cwd() + '/js/lang/pack.js';
 
         var content = stringify(data, { space: '    ' });
 
-        content = 'module.exports = ' + content;
+        content = fileContent + '=' + content;
 
         filetool.writefile(gsfile, content);
         console.log('多语言文件已生成:'.green + ' ==========> ' + (gsfile).yellow);
@@ -157,7 +157,7 @@ var exportLangFile = {
             if (hasValues) {
                 if (isHashed) {
                     var key = newObject[options.hash];
-
+                    console.log(key);
                     if (languages.indexOf(key) > -1) {
                         key = key.replace('-', '').toLowerCase();
                         finalList[key] = newObject.data;

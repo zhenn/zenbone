@@ -19,8 +19,12 @@ program
 program
     .command('init')
     .description('scraffold for initialize project')
-    .action(function() {
-        scaffold.main();
+    .action(function(action) {
+        if (action == 'act') {
+            scaffold.main('/temp-act');
+        } else {
+            scaffold.main('/temp');
+        }
     });
 
 program
@@ -47,6 +51,7 @@ program
     .command('lang <action>')
     .description('extract multi-language key and export multi-language file')
     .action(function(action) {
+        
         if (action == 'file') {
             exportLangFile.main();
         } else if (action == 'key'){
@@ -105,7 +110,5 @@ program
         widget.uninstall(name);
     });
 
-
-    
 program.parse(process.argv);
 
