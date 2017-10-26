@@ -23,13 +23,17 @@ var output = {
 // 声明cssloader
 var cssLoader = {
     test: /\.css$/,
-    loader: 'style!css'
+    use: [
+        'style-loader',
+        'css-loader'
+    ]
 };
 
 if (env == 'stage') {
      // 定制cdn路径
     output.publicPath = '/component/' + projectName + '/' + projectVersion + '/assets/';
-    cssLoader.loader = ExtractTextPlugin.extract("style-loader", "css-loader");
+    cssLoader.loader = ExtractTextPlugin.extract("css-loader", "postcss-loader");
+    delete cssLoader.use;
 }
 
 
@@ -48,7 +52,8 @@ module.exports = {
                 loader: 'babel-loader',
                 exclude: /node_modules/,
                 query: {
-                    presets: ['es2015', 'react', 'stage-0']
+                    presets: ['es2015', 'react', 'stage-0'],
+                    plugins: ['transform-remove-strict-mode']
                 }
             },
             
