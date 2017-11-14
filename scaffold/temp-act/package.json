@@ -41,7 +41,7 @@
   },
   "componentDomain": "http://h5widget.xingyunzhi.cn/",
   "cdnDomain": "<%= cdnDomain %>",
-  "googleFilePrefix": "window.UpLive_LangPack",
+  "googleFileExport": "window.UpLive_LangPack",
   "googleSpreadsheetId": "1Hjp1U2iEVGyvLwUAzIuUfRtMY0wYTWSUvAEqjmWOpok",
   "googleWorksheet": [
     "活动翻译模版New"
