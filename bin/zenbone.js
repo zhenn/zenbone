@@ -13,7 +13,9 @@ program
     .version(package.version)
     .option('-p, --port [number]', 'select port for node-service', 80) // 声明端口
     .option('-s, --stage', 'define stage-env for building')
-    .option('-P, --product', 'define product-env for building');
+    .option('-P, --product', 'define product-env for building')
+    .option('-sp, --split', 'split the language pack')
+    .option('-m, --multi', 'multi enter the language pack');
 
 // 子命令: 初始化项目
 program
@@ -53,7 +55,10 @@ program
     .action(function(action) {
         
         if (action == 'file') {
-            exportLangFile.main();
+            exportLangFile.main({
+                split: program.split,
+                multi: program.multi
+            });
         } else if (action == 'key'){
             lang.extract();
         } else {

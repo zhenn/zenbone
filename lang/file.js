@@ -5,6 +5,7 @@ var GoogleSpreadsheet = require('google-spreadsheet');
 var Promise = require('bluebird');
 var stringify = require('json-stable-stringify');
 var filetool = require('../base/filetool');
+var fs = require('fs');
 
 var languages = [
     'zh-CN', 'zh-TW', 'zh-HK', 'ar-EG', 'vi-VN', 'en-US',
@@ -26,13 +27,41 @@ var languages = [
 ];
 
 var exportLangFile = {
-    main: function() {
+    main: function(cfg) {
         var self = this;
+        var split = cfg.split;
         var cwd = process.cwd();
         var package = require(cwd + '/package.json');
         var spreadsheetId = package.googleSpreadsheetId;
         var googleWorksheet = package.googleWorksheet || 0; // 从0开始
         var fileContent = package.googleFileExport || 'module.exports'
+
+        if (cfg.multi) {
+            for (var entername in googleWorksheet) {
+                var self = this;
+                (function() {
+                    var _entername = entername;
+                    var sheetTitle = googleWorksheet[entername];
+                    self.spreadsheetToJson({
+                        spreadsheetId: spreadsheetId,
+                        vertical: true,
+                        hash: 'key',
+                        worksheet: sheetTitle
+                    })
+                    .then(function(res) {
+                        // 获取JSON数据
+                        // TODO 导出到指定的文件目录中
+                        self.save(res, fileContent, cfg, _entername);
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    })
+                })();
+
+                
+            }
+            return;
+        }
         if (spreadsheetId) {
             this.spreadsheetToJson({
                     spreadsheetId: spreadsheetId,
@@ -43,7 +72,7 @@ var exportLangFile = {
                 .then(function(res) {
                     // 获取JSON数据
                     // TODO 导出到指定的文件目录中
-                    self.save(res, fileContent);
+                    self.save(res, fileContent, cfg);
                 })
                 .catch(function(err) {
                     console.log(err);
@@ -53,15 +82,33 @@ var exportLangFile = {
         }
     },
 
-    save: function(data, fileContent) {
-        var gsfile = process.cwd() + '/js/lang/pack.js';
+    save: function(data, fileContent, cfg, entername) {
+        var gsfile = process.cwd() + '/js/lang/' + (entername ? (entername + '/') : '') + 'pack.js';
+        var split = cfg.split;
 
         var content = stringify(data, { space: '    ' });
 
         content = fileContent + '=' + content;
 
         filetool.writefile(gsfile, content);
+
+        // console.log('++++++++++++++++++++++++++++++++', split);
+        if (split) {
+            this.splitFile(content, gsfile);
+        }
         console.log('多语言文件已生成:'.green + ' ==========> ' + (gsfile).yellow);
+    },
+
+    splitFile(content, _path) {
+        content = JSON.parse(content.replace('module.exports=', ''));
+        var itemPath;
+        for (var i in content) {
+            itemPath = _path.replace('pack', i);
+            // console.log(content[i])
+            filetool.writefile(itemPath, 'module.exports=' + stringify(content[i], {
+                space: '    '
+            }) + ';');
+        }
     },
 
     cellsToJson: function(cells, options) {
