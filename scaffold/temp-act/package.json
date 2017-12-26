@@ -37,7 +37,10 @@
     "style-loader": "^0.18.2",
     "underscore-template-loader": "^0.8.0",
     "url-loader": "^0.5.9",
-    "webpack": "^3.5.5"
+    "webpack": "^3.5.5",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
+    "autoprefixer": "^7.2.3"
   },
   "componentDomain": "http://h5widget.xingyunzhi.cn/",
   "cdnDomain": "<%= cdnDomain %>",

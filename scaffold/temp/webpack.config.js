@@ -25,25 +25,32 @@ var output = {
 
 // 声明cssloader
 var cssLoader = {
-    test: /\.css$/,
+    test: /\.(css|less)$/,
     use: [
         'style-loader',
-        'css-loader'
+        'css-loader',
+        'postcss-loader',
+        'less-loader'
     ]
 };
+
+var extractCSS = new ExtractTextPlugin({
+    allChunks: true,
+    filename: '[name].css'
+});
 
 // 为product环境打包时
 if (env == 'product') {
     // 定制cdn路径
     output.publicPath = '//' + cdnDomain + '/' + gitlabGroup + '/' + projectName + '/' + projectVersion + '/assets/';
-    cssLoader.loader = ExtractTextPlugin.extract("css-loader", "postcss-loader");
+    cssLoader.loader = extractCSS.extract(['css-loader', 'postcss-loader', 'less-loader']);
     delete cssLoader.use;
 }
 
 if (env == 'stage') {
      // 定制cdn路径
     output.publicPath = '/' + gitlabGroup + '/' + projectName + '/' + projectVersion + '/assets/';
-    cssLoader.loader = ExtractTextPlugin.extract("css-loader", "postcss-loader");
+    cssLoader.loader = extractCSS.extract(['css-loader', 'postcss-loader', 'less-loader']);
     delete cssLoader.use;
 }
 
@@ -77,8 +84,8 @@ var config = {
                 loader: 'vue'
             },
             cssLoader,
-            { 
-                test: /\.css|jsx?$/,
+            {
+                test: /\.(css|less|jsx?)$/,
                 loader: StringReplacePlugin.replace({
                     replacements: [
                         {
@@ -97,13 +104,13 @@ var config = {
                     ]
                 })
             },
-            { 
-                test: /\.png$/, 
+            {
+                test: /\.png$/,
                 loader: "url-loader?limit=6000" // 小于3k, 转成base64
             },
-            { 
-                test: /\.jpg|mp3|mp4|gif$/, 
-                loader: "file-loader" 
+            {
+                test: /\.jpg|mp3|mp4|gif$/,
+                loader: "file-loader"
             }
         ]
     },
@@ -119,12 +126,13 @@ var config = {
         contentBase: './',  // 服务根目录
         color: true,  // 命令行是否彩色
         inline: true, // 项目文件保存自动编译文件模块
+        host: '0.0.0.0', //  使用IP访问
         port: 80 // 启动端口
     },
 
     // 插件
     plugins: [
-        new ExtractTextPlugin("[name].css"),
+        extractCSS,
         new StringReplacePlugin(),
         new webpack.optimize.CommonsChunkPlugin({
             name: "commons",
