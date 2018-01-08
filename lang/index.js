@@ -25,7 +25,7 @@ var lang = {
     },
 
     getKeyArray: function() {
-        var langKeyExp = /lang\.template\(\s*['"](.*?)["']/gi;
+        var langKeyExp = /lang\.template\(\s*['"](.*?[^\\"']*.*)["']/gi;
         var jsfiles = filetool.walker(process.cwd() + '/js');
         var result = [];
 
