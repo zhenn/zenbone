@@ -11,7 +11,7 @@ var babel = require('babel-core');
 module.exports = {
     build: function() {
         console.log('即将打包组件...');
-        
+
         this.compileES6();
         this.makeTar();
     },
@@ -24,7 +24,7 @@ module.exports = {
         }
 
         var srcFiles = filetool.walker(cwd + '/src');
-        
+
         srcFiles.forEach(function(item, i) {
             console.log(item)
             if (path.extname(item) == '.js') {
@@ -60,7 +60,7 @@ module.exports = {
         if (fs.existsSync(cwd + '/.git')) {
             fs.renameSync(cwd + '/.git', parentPath + '/.git');
         }
-         
+
         _process.exec('cd ' + parentPath + ' && tar -zcvf ' + curDir + '.tar.gz ' + curDir, function(err, stdout, stderr) {
             console.log('生成' + existTar);
             fs.renameSync(parentPath + '/' + curDir + '.tar.gz', existTar);
@@ -70,7 +70,7 @@ module.exports = {
     },
 
     initScaffold: function() {
-        
+
         var cwd = process.cwd();
         var basename = path.basename(cwd);
         var packagePath = cwd + '/package.json';
@@ -78,7 +78,7 @@ module.exports = {
         var newPackage = _.template(fs.readFileSync(packagePath, 'utf-8'))({
             name: basename
         });
-        
+
         filetool.writefile(packagePath, newPackage);
         console.log('组件脚手架创建完成...');
     },
@@ -106,18 +106,16 @@ module.exports = {
         }
 
         // 是否已安装
-        var installed = self.isInstalled(name); 
+        var installed = self.isInstalled(name);
         if (installed) {
             return;
         }
 
         self.installedArray.push(name);
 
-        
+
         var url = componentDomain + name + '/' + name + '.tar.gz';
         console.log('正在获取: ' + url);
-
-        self.emitPackage(name);
 
         nodeHttp.GET(url, function (response) {
 
@@ -127,14 +125,15 @@ module.exports = {
             }
 
             var localTarPath = cwd + '/' + name + '.tar.gz';
-            
+            //  获取到包，将依赖写入_depComponent
+            self.emitPackage(name);
             fs.writeFileSync(localTarPath , response.buffer);
             console.log(localTarPath.gray, fs.statSync(localTarPath).size.toString().yellow + 'B');
             _process.exec('tar -xzvf ' + name + '.tar.gz', function(err, stdout, stderr) {
-                
+
                 fs.unlinkSync(localTarPath);
                 var package = JSON.parse(fs.readFileSync(cwd + '/' + name + '/package.json', 'utf-8'));
-                
+
                 var dependencies = package._depComponent;
 
                 function moveDir() {
@@ -152,13 +151,13 @@ module.exports = {
                 if (dependencies.length == 0) {
                     return;
                 }
-                
+
                 dependencies.forEach(function(item, i) {
                     self.install(item);
                 });
 
             });
-            
+
         });
 
     },
@@ -173,7 +172,7 @@ module.exports = {
         var package = JSON.parse(packageFile),
             _depComponent = package._depComponent || [],
             _arr = _depComponent.concat();
-        
+
         // console.log(name, _arr);
 
         if (_arr.indexOf(name) >= 0) {
@@ -192,7 +191,7 @@ module.exports = {
         var package = JSON.parse(fs.readFileSync(cwd + '/package.json', 'utf-8'));
         var _depComponent = package._depComponent;
 
-        if (_depComponent.length == 0) {
+        if (!_depComponent || _depComponent.length == 0) {
             console.log('未发现本项目有任何组件依赖...');
             return;
         }
