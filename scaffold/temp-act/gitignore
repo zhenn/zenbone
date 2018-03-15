@@ -1,6 +1,0 @@
-node_module
-node_modules
-*.swp
-*.swo
-.DS_store
-.git
