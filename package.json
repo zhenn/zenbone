@@ -1,5 +1,5 @@
 {
-  "name": "zenbone2",
+  "name": "zenbone",
   "version": "2.0.4",
   "description": "tools for frontend dev, based on webpack",
   "bin": {
