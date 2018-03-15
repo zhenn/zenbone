@@ -2,10 +2,6 @@
 
 本版本是基于[zenbone](https://www.npmjs.com/package/zenbone)的升级版本，兼容以前版本的zenbone命令。
 
-原版本由@zhenn开发完成，本版本只做新特性添加和优化。
-
-虽然zenbone名称修改成了zenbone2，但是命令还是使用zenbone，也增加了短命令，zb；
-
 ----
 
 **注意：本工具的部分功能和公司网络强绑定，外部不可使用**
@@ -91,13 +87,13 @@
 ## 二，安装维护
 ### 安装
 
-    npm install zenbone2 -g
+    npm install zenbone -g
 
 ### 更新
 
-    npm update zenbone2 -g
+    npm update zenbone -g
 
-若更新失败，可指定最新版本号重新安装，`npm install zenbone2@x.y.z -g`
+若更新失败，可指定最新版本号重新安装，`npm install zenbone@x.y.z -g`
 
 ## 三，项目开发
 
@@ -143,7 +139,7 @@ zenbone对`css、js、images`文件夹没有要求，可以任意存放，JS模�
 	sudo npm install webpack webpack-dev-server -g
 	npm install
 	zenbone start
-	
+
 如果依赖下载过慢，可以访问国内的[npm镜像服务器](https://registry.npm.taobao.org), 也可以使用cnpm（但是需要手动安装依赖）, 设置方式如下
 
     npm config set registry https://registry.npm.taobao.org
