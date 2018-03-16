@@ -1,119 +1,143 @@
-#!/usr/local/bin/node --harmony
+#!/usr/bin/env node
+const program = require('commander');
+const pkgConfig = require('../package.json');
+const scaffold = require('../lib/scaffold/index'); // man
+const app = require('../lib/app');
+const build = require('../lib/build');
+const component = require('../lib/widget/index'); // man
+const lang = require('../lib/lang/index');
+const exportLangFile = require('../lib/lang/file'); //  很慢啊
 
-var package = require('../package.json');
-var program = require('commander');
-var scaffold = require('../scaffold/index');
-var app = require('../app');
-var build = require('../build');
-var component = require('../component/index');
-var lang = require('../lang/index');
-var exportLangFile = require('../lang/file');
+require('colors');
+
+if (parseInt(process.version.match(/v(\d+)/)[1]) < 6) {
+    console.log('你的node.js版本过低，该程序要求node.js版本不能低于v6.0.0');
+    process.exit();
+}
 
 program
-    .version(package.version)
-    .option('-p, --port [number]', 'select port for node-service', 80) // 声明端口
-    .option('-s, --stage', 'define stage-env for building')
-    .option('-P, --product', 'define product-env for building')
-    .option('-sp, --split', 'split the language pack')
-    .option('-m, --multi', 'multi enter the language pack');
+    .version(pkgConfig.version, '-v, --version')
+    .usage('<command> [options]')
+    .option('-p, --port [number]', '选择一个端口启动调试服务器', 80) // 声明端口
+    .option('-s, --stage', '构建或部署当前代码为测试(stage)环境')
+    .option('-P, --product', '构建或部署当前代码为生产(product)环境')
+    .option('-V, --version-set', '构建当前代码为生产(product)环境时询问版本号')
+    .option('-sp, --split', '将语言包拆成一个单独的文件而不是打包在项目的js中，有助于单独拉取文案')
+    .option('-m, --multi', '是否导出为多个语言文件');
 
 // 子命令: 初始化项目
 program
     .command('init')
-    .description('scraffold for initialize project')
-    .action(function(action) {
-        if (action == 'act') {
-            scaffold.main('/temp-act');
-        } else {
-            scaffold.main('/temp');
+    .description('使用脚手架初始化一个基于模板的项目，默认normal模板')
+    .action(function (templateName) {
+        if (typeof templateName === 'object') {
+            templateName = 'normal';
         }
+        if (templateName === 'act') {
+            templateName = 'activity';
+        }
+        scaffold().main(templateName);
     });
 
 program
     .command('start')
-    .description('start dev env')
-    .action(function() {
+    .description('启动调试服务器(sudo webpack-dev-server)')
+    .action(function () {
         app();
     });
-
 
 // 子命令:打包服务
 program
     .command('build')
-    .description('build project')
+    .description('构建项目到stage或者product环境')
     .action(function () {
-        build.main({
-            stage : program.stage,
-            product : program.product
+        build().main({
+            stage: program.stage,
+            product: program.product,
+            versionSet: program.versionSet
         });
     });
 
+program
+    .command('deploy')
+    .description('调用Jenkins构建项目，支持stage,product环境')
+    .action(function () {
+        require('../lib/deploy')({
+            stage: !program.product
+        });
+    });
 
 program
     .command('lang <action>')
-    .description('extract multi-language key and export multi-language file')
-    .action(function(action) {
-        
-        if (action == 'file') {
-            exportLangFile.main({
+    .description('生成多语言的key，或者拉取多语言的文案')
+    .action(function (action) {
+        if (action === 'file') {
+            exportLangFile().main({
                 split: program.split,
                 multi: program.multi
             });
-        } else if (action == 'key'){
-            lang.extract();
+        } else if (action === 'key') {
+            lang().extract();
         } else {
-            console.log('未知action\n可选操作:\n  file 导出js文件\n  key 提取多语言包keys');
+            console.log('未知操作，可选操作:\n  file 拉取文案导出js文件\n  key 提取多语言包keys');
         }
     });
 
 program
-    .command('component <action>')
-    .description('component')
+    .command('widget [action]')
+    .alias('component')
+    .description('对组件进行操作，可选操作action（init, list, build）')
     .action(function (action) {
-        if (action == 'build') {
-            component.build();
-            build.main({
-                stage : program.stage
-            }); 
-        } else if (action == 'init') {
-            component.initScaffold();
+        if (action === 'build') {
+            component().build(function () {
+                build().main({
+                    stage: program.stage,
+                    detail: program.detail,
+                    widget: true
+                });
+            });
+        } else if (action === 'list') {
+            component().widgetList();
+        } else if (action === 'init') {
+            scaffold().main('widget');
         } else {
-            console.log('未知action\n可选操作:\n  init 初始化组件\n  build 打包组价');
+            console.log('未知操作，可选操作:\n  list 列出线上所有的小组件\n  build 构建你的小组件(widget)并压缩成tar.gz文件供发布\n  init 初始化一个widget的工程');
         }
-        
+    });
+
+// 更新下载的模板
+program
+    .command('template')
+    .description('列出服务器上的所有的模板')
+    .action(function () {
+        scaffold().templateList();
+    });
+
+// 更新下载的模板
+program
+    .command('pull [name]')
+    .description('在远程的服务器上下载一个或多个模板')
+    .action(function (name) {
+        scaffold().pullTemplate(typeof name === 'string' ? name : null);
     });
 
 // 子命令:安装js组件
 program
     .command('install [name]')
-    .description('intall widget')
+    .description('将远程服务器上的组件下载到本地并添加到项目的依赖中')
     .action(function (name) {
-        component.install(name);
+        component().install(typeof name === 'string' ? name : null);
     });
 
-// 子命令:更新js组件
 program
-    .command('update <name>')
-    .description('update widget')
+    .command('uninstall [name]')
+    .description('从本地node_modules中删除小组件并从项目依赖中移除')
     .action(function (name) {
-        widget.update(name);
-    });
-
-// 子命令:更新所有js组件
-program
-    .command('update <allWidget>')
-    .description('update all-widget')
-    .action(function (name) {
-        widget.updateAll(name);
-    });
-
-// 子命令:卸载js组件
-program
-    .command('uninstall <name>')
-    .description('unintall widget')
-    .action(function (name) {
-        widget.uninstall(name);
+        component().uninstall(typeof name === 'string' ? name : null);
     });
 
 program.parse(process.argv);
-
+const cmds = ['init', 'start', 'build', 'deploy', 'lang', 'widget', 'component', 'template', 'pull', 'install', 'uninstall'];
+if (process.argv.length < 3 || cmds.indexOf(process.argv[2]) === -1) {
+    program.help();
+}
