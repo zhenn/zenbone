@@ -15,6 +15,8 @@ if (parseInt(process.version.match(/v(\d+)/)[1]) < 6) {
     process.exit();
 }
 
+
+
 program
     .version(pkgConfig.version, '-v, --version')
     .usage('<command> [options]')
@@ -22,8 +24,9 @@ program
     .option('-s, --stage', '构建或部署当前代码为测试(stage)环境')
     .option('-P, --product', '构建或部署当前代码为生产(product)环境')
     .option('-V, --version-set', '构建当前代码为生产(product)环境时询问版本号')
-    .option('-sp, --split', '将语言包拆成一个单独的文件而不是打包在项目的js中，有助于单独拉取文案')
-    .option('-m, --multi', '是否导出为多个语言文件');
+    .option('-S, --split', '将语言包拆成一个单独的文件而不是打包在项目的js中，有助于单独拉取文案')
+    .option('-M, --multi', '是否导出为多个语言文件')
+    .option('-L, --splitmulti', '多语言入口文件&根据语言拆成多个单独的包，--split和--multi命令的合并')
 
 // 子命令: 初始化项目
 program
@@ -59,12 +62,19 @@ program
     });
 
 program
-    .command('deploy')
+    .command('deploy [configFile]')
     .description('调用Jenkins构建项目，支持stage,product环境')
-    .action(function () {
-        require('../lib/deploy')({
-            stage: !program.product
-        });
+    .action(function (configFile) {
+        if (configFile) {
+            require('../lib/deploy')({
+                stage: !program.product,
+                configFile: configFile
+            });
+        } else {
+            require('../lib/deploy')({
+                stage: !program.product
+            });
+        }
     });
 
 program
@@ -73,14 +83,16 @@ program
     .action(function (action) {
         if (action === 'file') {
             exportLangFile().main({
-                split: program.split,
-                multi: program.multi
+                split: program.split || program.splitmulti,
+                multi: program.multi || program.splitmulti
             });
         } else if (action === 'key') {
             lang().extract();
         } else {
             console.log('未知操作，可选操作:\n  file 拉取文案导出js文件\n  key 提取多语言包keys');
         }
+
+
     });
 
 program
