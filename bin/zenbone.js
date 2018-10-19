@@ -7,6 +7,7 @@ const build = require('../lib/build');
 const component = require('../lib/widget/index'); // man
 const lang = require('../lib/lang/index');
 const exportLangFile = require('../lib/lang/file'); //  很慢啊
+const sprites = require('../lib/sprites');
 
 require('colors');
 
@@ -47,6 +48,13 @@ program
     .description('启动调试服务器(sudo webpack-dev-server)')
     .action(function () {
         app();
+    });
+
+program
+    .command('sprite')
+    .description('生成精灵图')
+    .action(function () {
+        sprites().start({});
     });
 
 // 子命令:打包服务
@@ -149,7 +157,7 @@ program
     });
 
 program.parse(process.argv);
-const cmds = ['init', 'start', 'build', 'deploy', 'lang', 'widget', 'component', 'template', 'pull', 'install', 'uninstall'];
+const cmds = ['init', 'start', 'sprite', 'build', 'deploy', 'lang', 'widget', 'component', 'template', 'pull', 'install', 'uninstall'];
 if (process.argv.length < 3 || cmds.indexOf(process.argv[2]) === -1) {
     program.help();
 }
