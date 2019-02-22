@@ -8,31 +8,6 @@
 
 **建议：Node.js版本 > v6.0.0**
 
-## 2018-03-12更新
-1. 构建为product时，询问version是一个可选项，不影响老版本命令。
-2. 修改显示构建日志的BUG。
-
-## 2018-03-09更新
-1. Jenkins构建支持打印日志。
-2. 默认线上拉取模板创建项目。
-3. Gitlab-api实现list功能，以表格形式显示。
-
-## 优化
-1. 项目发布为在线上版本之前自动询问更新版本号，防止发布上线没有修改version。
-2. 编译静态文件加上时间戳，在stage环境创建分支，很有效果。
-3. zenbone lang key 加上了本次更新的时间戳，优化提取正则表达式。
-4. 优化了执行速度，将所有的依赖就近加载，防止启动过慢。
-5. 原来的template子命令可以使用widget子命令进行操作。
-6. 安装的组件支持删除操作。
-7. 修复了构建阶段的BUG。
-
-## 新特性
-1. 模板和工具拆分，将所有的模板托管在gitlab的template分组下面。
-2. 线上模板本地缓存、更新等，支持批量操作。
-3. 批量安装、卸载、更新组件。
-4. 支持基于Gitlab-api进行template、widget的列出操作。
-5. 本地调用jenkins任务进行部署，仅支持stage和product，暂时不支持其他任务。
-
 ## 一，概述
 
 **要点**
@@ -57,31 +32,32 @@
 
 **功能预览：**
 ```
-  Usage: zenbone <command> [options]
-
-  Options:
-
-    -v, --version        output the version number
-    -p, --port [number]  选择一个端口启动调试服务器 (default: 80)
-    -s, --stage          构建或部署当前代码为测试(stage)环境
-    -P, --product        构建或部署当前代码为生产(product)环境
-    -V, --version-set    构建当前代码为生产(product)环境时询问版本号
-    -sp, --split         将语言包拆成一个单独的文件而不是打包在项目的js中，有助于单独拉取文案
-    -m, --multi          是否导出为多个语言文件
-    -h, --help           output usage information
-
-  Commands:
-
-    init                       使用脚手架初始化一个基于模板的项目，默认normal模板
-    start                      启动调试服务器(sudo webpack-dev-server)
-    build                      构建项目到stage或者product环境
-    deploy                     调用Jenkins构建项目，支持stage,product环境
-    lang <action>              生成多语言的key，或者拉取多语言的文案
-    widget|component [action]  对组件进行操作，可选操作action（init, list, build）
-    template                   列出服务器上的所有的模板
-    pull [name]                在远程的服务器上下载一个或多个模板
-    install [name]             将远程服务器上的组件下载到本地并添加到项目的依赖中
-    uninstall [name]           从本地node_modules中删除小组件并从项目依赖中移除
+    Usage: zenbone <command> [options]
+    
+    Options:
+      -v, --version              output the version number
+      -p, --port [number]        选择一个端口启动调试服务器 (default: 80)
+      -s, --stage                构建或部署当前代码为测试(stage)环境
+      -P, --product              构建或部署当前代码为生产(product)环境
+      -S, --split                将语言包拆成一个单独的文件而不是打包在项目的js中，有助于单独拉取文案
+      -M, --multi                是否导出为多个语言文件
+      -L, --splitmulti           多语言入口文件&根据语言拆成多个单独的包，--split和--multi命令的合并
+      -I, --src [string]         源文件夹路径，默认"js"，生成多语言使用
+      -O, --output [string]      目标文件夹路径，默认"js/lang"，生成多语言使用
+      -h, --help                 output usage information
+    
+    Commands:
+      init                       使用脚手架初始化一个基于模板的项目，默认normal模板
+      start                      启动调试服务器(sudo webpack-dev-server)
+      sprite                     生成精灵图
+      build                      构建项目到stage或者product环境
+      deploy [configFile]        调用Jenkins构建项目，支持stage,product环境
+      lang <action>              生成多语言的key，或者拉取多语言的文案
+      widget|component [action]  对组件进行操作，可选操作action（init, list, build）
+      template                   列出服务器上的所有的模板
+      pull [name]                在远程的服务器上下载一个或多个模板
+      install [name]             【已过时】将远程服务器上的组件下载到本地并添加到项目的依赖中
+      uninstall [name]           【已过时】从本地node_modules中删除小组件并从项目依赖中移除
 ```
 
 ## 二，安装维护
@@ -136,11 +112,11 @@ zenbone对`css、js、images`文件夹没有要求，可以任意存放，JS模�
 
 首次使用`zenbone start`启动环境，等待时间通常会比较长，其主要时间消耗安装工具依赖及项目依赖上，亦可逐次执行上述操作。
 
-	sudo npm install webpack webpack-dev-server -g
+	sudo npm install webpack@3.5.5 webpack-dev-server@1.14.1 -g
 	npm install
 	zenbone start
 
-如果依赖下载过慢，可以访问国内的[npm镜像服务器](https://registry.npm.taobao.org), 也可以使用cnpm（但是需要手动安装依赖）, 设置方式如下
+如果依赖下载过慢，可以访问国内的[npm镜像服务器](https://registry.npm.taobao.org), 目前我们内部已经搭建的私有仓库，可以直接使用私有仓库, 设置方式如下
 
     npm config set registry https://registry.npm.taobao.org
 
@@ -154,8 +130,9 @@ zenbone对`css、js、images`文件夹没有要求，可以任意存放，JS模�
 
 	npm install react --save
 
-业务组件，通常和业务逻辑结合紧密，并不具备更高通用性，通常发布到业务服务器，则需要通过zenbone命令安装。
+【已过时】~~业务组件，通常和业务逻辑结合紧密，并不具备更高通用性，通常发布到业务服务器，则需要通过zenbone命令安装。~~
 
+    # 下面的命令已不建议使用
 	zenbone install xxx
 	# 或者一次安装多个组件，所有的组件用""包起来，中间使用空格隔开即可
 	zenbone install "xxx bbb nnn"
@@ -171,9 +148,12 @@ zenbone对`css、js、images`文件夹没有要求，可以任意存放，JS模�
 #### 一键提取多语言包keys
 代码中的格式必须包含 `lang.template('xxxx'` 时，xxx会被提取。
 
-	zenbone lang key
+	# 支持两个参数
+	# src 可以不传，默认是 js
+	# output 可以不传，默认是 js/lang
+	zenbone lang key --src js --output js/lang
 
-自动在`js/lang/`目录创建`keys`文件，JS文件中语言包字段都会被收录，形如：
+自动在传递的目录（不传就取默认值）创建`keys`文件，JS文件中语言包字段都会被收录，形如：
 
 	偷星
 	我的
@@ -210,7 +190,9 @@ zenbone对`css、js、images`文件夹没有要求，可以任意存放，JS模�
 
 使用Google Spreadsheet维护多语言配置文件，使用该明了从Google Spreadsheet中导出配置内容，创建本地多语言包js文件。
 
-	zenbone lang file
+    # 支持一个参数
+	# output 可以不传，默认是 js/lang
+	zenbone lang file --output js/lang
 
 package.json配置：
 
@@ -266,13 +248,6 @@ package.json配置：
 
 - css\js对图片资源的引用
 - html入口对js\css的应用
-
-务必在进行打包前更新项目版本号，避免浏览器缓存。
-
-**product环境打包时输入version，会询问version**
-
-    zenbone build --product -V
-
 
 **打包后项目结构：**
 

@@ -24,7 +24,6 @@ program
     .option('-p, --port [number]', '选择一个端口启动调试服务器', 80) // 声明端口
     .option('-s, --stage', '构建或部署当前代码为测试(stage)环境')
     .option('-P, --product', '构建或部署当前代码为生产(product)环境')
-    .option('-V, --version-set', '构建当前代码为生产(product)环境时询问版本号')
     .option('-S, --split', '将语言包拆成一个单独的文件而不是打包在项目的js中，有助于单独拉取文案')
     .option('-M, --multi', '是否导出为多个语言文件')
     .option('-L, --splitmulti', '多语言入口文件&根据语言拆成多个单独的包，--split和--multi命令的合并')
