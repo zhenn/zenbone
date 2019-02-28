@@ -38,5 +38,9 @@
     "word-table": "^1.0.3",
     "writefile": "^0.2.8"
   },
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/node": "^11.9.5"
+  }
 }
