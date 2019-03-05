@@ -24,10 +24,11 @@ program
     .option('-p, --port [number]', '选择一个端口启动调试服务器', 80) // 声明端口
     .option('-s, --stage', '构建或部署当前代码为测试(stage)环境')
     .option('-P, --product', '构建或部署当前代码为生产(product)环境')
-    .option('-V, --version-set', '构建当前代码为生产(product)环境时询问版本号')
     .option('-S, --split', '将语言包拆成一个单独的文件而不是打包在项目的js中，有助于单独拉取文案')
     .option('-M, --multi', '是否导出为多个语言文件')
     .option('-L, --splitmulti', '多语言入口文件&根据语言拆成多个单独的包，--split和--multi命令的合并')
+    .option('-I, --src [string]', '源文件夹路径，默认"js"，生成多语言使用')
+    .option('-O, --output [string]', '目标文件夹路径，默认"js/lang"，生成多语言使用');
 
 // 子命令: 初始化项目
 program
@@ -92,10 +93,14 @@ program
         if (action === 'file') {
             exportLangFile().main({
                 split: program.split || program.splitmulti,
-                multi: program.multi || program.splitmulti
+                multi: program.multi || program.splitmulti,
+                outputPath: program.output || 'js/lang'
             });
         } else if (action === 'key') {
-            lang().extract();
+            lang().extract({
+                srcPath: program.src || 'js',
+                outputPath: program.output || 'js/lang'
+            });
         } else {
             console.log('未知操作，可选操作:\n  file 拉取文案导出js文件\n  key 提取多语言包keys');
         }
@@ -144,15 +149,17 @@ program
 // 子命令:安装js组件
 program
     .command('install [name]')
-    .description('将远程服务器上的组件下载到本地并添加到项目的依赖中')
+    .description('【已过时】将远程服务器上的组件下载到本地并添加到项目的依赖中'.yellow)
     .action(function (name) {
+        console.log('该命令已经过时了，请使用 npm install c-xxx 安装组件'.red);
         component().install(typeof name === 'string' ? name : null);
     });
 
 program
     .command('uninstall [name]')
-    .description('从本地node_modules中删除小组件并从项目依赖中移除')
+    .description('【已过时】从本地node_modules中删除小组件并从项目依赖中移除'.yellow)
     .action(function (name) {
+        console.log('该命令已经过时了，请使用 npm uninstall c-xxx 删除组件'.red);
         component().uninstall(typeof name === 'string' ? name : null);
     });
 
