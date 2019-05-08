@@ -63,7 +63,7 @@ program
     .command('build')
     .description('构建项目到stage或者product环境')
     .action(function () {
-        build().main({
+        build({check: true}).main({
             stage: program.stage,
             product: program.product,
             versionSet: program.versionSet
@@ -115,7 +115,7 @@ program
     .action(function (action) {
         if (action === 'build') {
             component().build(function () {
-                build().main({
+                build({check: false}).main({
                     stage: program.stage,
                     detail: program.detail,
                     widget: true
